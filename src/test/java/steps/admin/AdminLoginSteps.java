@@ -5,7 +5,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.platform.commons.util.StringUtils;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static steps.Hooks.page;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -36,5 +38,21 @@ public class AdminLoginSteps {
     @Then("I should see dashboard page")
     public void iShouldSeeDashboardPage() {
         assertThat(page).hasTitle("Dashboard");
+    }
+
+    @Then("I should see error message for {string} is {string}")
+    public void verifyValidationMessage(String label, String errorMessage) {
+        String validationMessageXpath = String.format("//div[./label[normalize-space(.//text())='%s']]//div[contains(concat(' ',normalize-space(@class),' '),' field-error ')]", label);
+        Locator validationMessageLocator = page.locator(validationMessageXpath);
+        if("".equals(errorMessage)){
+            try{
+                validationMessageLocator.waitFor(new Locator.WaitForOptions().setTimeout(1000));
+            }catch (Exception exception){
+                validationMessageLocator = null;
+            }
+            assertNull(validationMessageLocator);
+        }else{
+            assertThat(validationMessageLocator).hasText(errorMessage);
+        }
     }
 }
