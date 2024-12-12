@@ -21,20 +21,6 @@ public class AdminLoginSteps {
         assertThat(buttonSignInLocator).isVisible();
     }
 
-    @When("I input {string} field with value {string}")
-    public void inputTest(String label, String value) {
-        String inputFieldXpath = String.format("//div[./label[normalize-space()='%s']]//input", label);
-        Locator inputFieldLocator = page.locator(inputFieldXpath);
-        inputFieldLocator.fill(value);
-    }
-
-    @And("I click on {string} button")
-    public void clickButton(String label) {
-        String loginButtonXpath = String.format("//button[normalize-space(.//text())='%s']", label);
-        Locator loginButtonLocator = page.locator(loginButtonXpath);
-        loginButtonLocator.click();
-    }
-
     @Then("I should see dashboard page")
     public void iShouldSeeDashboardPage() {
         assertThat(page).hasTitle("Dashboard");
