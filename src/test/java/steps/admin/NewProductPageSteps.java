@@ -1,5 +1,6 @@
 package steps.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microsoft.playwright.Locator;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -54,5 +55,10 @@ public class NewProductPageSteps {
     @And("I input a random SKU")
     public void inputRandomSKU() {
         newProductPage.inputRandomSKU();
+    }
+
+    @When("I create a product by api")
+    public void iCreateAProductByApi() throws JsonProcessingException {
+        newProductPage.createNewProductByApi();
     }
 }

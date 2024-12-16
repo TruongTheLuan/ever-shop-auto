@@ -1,16 +1,35 @@
 package pages;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.playwright.APIResponse;
+import com.microsoft.playwright.APIRequest;
+import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.RequestOptions;
+import data.productTestData;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static steps.Hooks.playwright;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static data.productTestData.productData;
 
 public class NewProductPage extends CommonPage{
     public String pageUrl = "/admin/products/new";
     public String pageHeader = "Create A New Product";
+    private static String CREATE_PRODUCT_API = "http://localhost:3000/api/products";
 
     public NewProductPage(Page page) {
         super(page);
@@ -55,6 +74,22 @@ public class NewProductPage extends CommonPage{
     public void inputRandomSKU() {
         String sku = String.valueOf(System.currentTimeMillis());
         inputText("SKU", sku);
+    }
+
+    public void createNewProductByApi() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> data = mapper.readValue(productTestData.productData, new TypeReference<Map<String, Object>>(){});
+        APIResponse response = page.request().post(CREATE_PRODUCT_API, RequestOptions.create().setData(data));
+        String responeBody = new String(response.body(), StandardCharsets.UTF_8);
+        Map<String, Object> res = mapper.readValue(responeBody, new TypeReference<Map<String, Object>>() {});
+        System.out.println("data: " + res.get("data"));
+        System.out.println("==================================");
+        System.out.println("Map res: " + res);
+        System.out.println("==================================");
+        System.out.println(responeBody);
+        //Save result from response => Delete product by ID/UUID
+        //new String(response.body()) => convert byte[] to string
+        //assertTrue(response.ok());
     }
 
     public boolean shouldBeOnPage(){

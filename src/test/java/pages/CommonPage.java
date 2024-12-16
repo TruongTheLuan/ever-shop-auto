@@ -12,7 +12,7 @@ public class CommonPage {
         this.page=page;
     }
 
-    public void selectMenuItem(String label) {
+    public void selectItemByLabel(String label){
         String menuItemXpath = String.format("//a[./text()[normalize-space()='%s']]", label);
         Locator menuItemLocator = page.locator(menuItemXpath);
         menuItemLocator.click();
@@ -22,6 +22,12 @@ public class CommonPage {
         String inputFieldXpath = String.format("//div[./label[normalize-space()='%s']]//input", label);
         Locator inputFieldLocator = page.locator(inputFieldXpath);
         inputFieldLocator.fill(value);
+    }
+
+    public void clearText(String label) {
+        String inputFieldXpath = String.format("//div[./label[normalize-space()='%s']]//input", label);
+        Locator inputFieldLocator = page.locator(inputFieldXpath);
+        inputFieldLocator.clear();
     }
 
     public void inputTextArea(String label, String value) {
@@ -40,6 +46,10 @@ public class CommonPage {
         String loginButtonXpath = String.format("//button[normalize-space(.//text())='%s']", label);
         Locator loginButtonLocator = page.locator(loginButtonXpath);
         loginButtonLocator.click();
+    }
+
+    public void verifyPageTitle(String pageTitle){
+        assertThat(page).hasTitle(pageTitle);
     }
 
     public void verifyPageWithHeader(String header) {

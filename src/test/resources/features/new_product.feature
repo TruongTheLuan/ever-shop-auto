@@ -1,7 +1,8 @@
 Feature: New product
-
-  Scenario: Verify admin can create new product
+  Background:
     Given I open admin login page
+  @create_product
+  Scenario: Verify admin can create new product
     When I input "Email" field with value "luanttruongtester@gmail.com"
     And I input "Password" field with value "admin1234"
     And I click on "SIGN IN" button
@@ -33,3 +34,12 @@ Feature: New product
     Then I should see notification is "Product saved successfully!"
     And I delete product "hunter"
 
+  @create_product_with_invalid_uuid
+  Scenario: Verify admin can create new product with invalid uuid
+    When I input "Email" field with value "luanttruongtester@gmail.com"
+    And I input "Password" field with value "admin1234"
+    And I click on "SIGN IN" button
+    Then I should see dashboard page
+    When I select menu item "New Product"
+    Then I should see "New Product" page with "Create A New Product"
+    Then I wait for 10000 ms
