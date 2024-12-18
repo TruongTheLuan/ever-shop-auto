@@ -2,8 +2,8 @@ Feature: New product
   Background:
     Given I open admin login page
   Scenario: Verify admin can create new product
-    When I input "Email" field with value "luanttruongtester@gmail.com"
-    And I input "Password" field with value "admin1234"
+    When I input "Email" field with value "$ADMIN_EMAIL$"
+    And I input "Password" field with value "$ADMIN_PASSWORD$"
     And I click on "SIGN IN" button
     Then I should see dashboard page
     When I select menu item "New Product"
@@ -35,8 +35,8 @@ Feature: New product
 
   @create_product_with_invalid_uuid
   Scenario: Verify admin can create new product with invalid uuid
-    When I input "Email" field with value "luanttruongtester@gmail.com"
-    And I input "Password" field with value "admin1234"
+    When I input "Email" field with value "$ADMIN_EMAIL$"
+    And I input "Password" field with value "$ADMIN_PASSWORD$"
     And I click on "SIGN IN" button
     Then I should see dashboard page
     When I select menu item "New Product"

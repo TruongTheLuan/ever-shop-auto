@@ -1,6 +1,7 @@
 package steps.admin;
 
 import com.microsoft.playwright.Locator;
+import common.ConfigUtils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,9 +12,14 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static steps.Hooks.page;
 
 public class CommonSteps {
-    private CommonPage commonPage = new CommonPage(page);
+    private final CommonPage commonPage = new CommonPage(page);
     @When("I input {string} field with value {string}")
     public void inputText(String label, String value) {
+        if("$ADMIN_EMAIL$".equals(value)){
+            value = ConfigUtils.getDotenv().get("adminEmail");
+        }else if("$ADMIN_PASSWORD$".equals(value)){
+            value = ConfigUtils.getDotenv().get("adminPwd");
+        }
         commonPage.inputText(label, value);
     }
 

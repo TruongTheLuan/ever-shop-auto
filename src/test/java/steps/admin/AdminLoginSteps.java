@@ -7,6 +7,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.platform.commons.util.StringUtils;
 
+import static common.CommonUtils.ADMIN_LOGIN_PATH;
+import static common.CommonUtils.COMMON_URL;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static steps.Hooks.page;
 
@@ -15,7 +17,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public class AdminLoginSteps {
     @Given("I open admin login page")
     public void openAdminLoginPage(){
-        page.navigate("http://localhost:3000/admin/login");
+        page.navigate(String.format("%s%s",COMMON_URL,ADMIN_LOGIN_PATH));
         String buttonSignInXpath = "//button[normalize-space(.//text())='SIGN IN']";
         Locator buttonSignInLocator = page.locator(buttonSignInXpath);
         assertThat(buttonSignInLocator).isVisible();

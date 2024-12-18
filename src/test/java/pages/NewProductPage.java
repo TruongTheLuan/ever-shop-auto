@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import model.Product;
 
+import static common.CommonUtils.CREATE_PRODUCT_API;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static steps.Hooks.playwright;
 
@@ -32,7 +33,6 @@ public class NewProductPage extends CommonPage{
     public String pageUrl = "/admin/products/new";
     public String pageHeader = "Create A New Product";
     public String uuid;
-    private static String CREATE_PRODUCT_API = "http://localhost:3000/api/products";
 
     public NewProductPage(Page page) {
         super(page);
