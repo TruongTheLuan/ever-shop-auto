@@ -1,7 +1,6 @@
 Feature: New product
   Background:
     Given I open admin login page
-  @create_product
   Scenario: Verify admin can create new product
     When I input "Email" field with value "luanttruongtester@gmail.com"
     And I input "Password" field with value "admin1234"
@@ -42,4 +41,12 @@ Feature: New product
     Then I should see dashboard page
     When I select menu item "New Product"
     Then I should see "New Product" page with "Create A New Product"
-    Then I wait for 10000 ms
+    Then I wait for 3000 ms
+    When I input "Name" field with value "hunter"
+    And I input a random SKU
+    And I input "Price" field with value "100"
+    And I input "Weight" field with value "10"
+    And I input "Quantity" field with value "10"
+    And I input "Url key" field with value "new_hunter07"
+    And I click on "Save" button
+    

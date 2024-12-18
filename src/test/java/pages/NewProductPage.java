@@ -11,6 +11,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.RequestOptions;
 import data.productTestData;
 
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import model.Product;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static steps.Hooks.playwright;
@@ -29,6 +31,7 @@ import static data.productTestData.productData;
 public class NewProductPage extends CommonPage{
     public String pageUrl = "/admin/products/new";
     public String pageHeader = "Create A New Product";
+    public String uuid;
     private static String CREATE_PRODUCT_API = "http://localhost:3000/api/products";
 
     public NewProductPage(Page page) {
@@ -78,18 +81,13 @@ public class NewProductPage extends CommonPage{
 
     public void createNewProductByApi() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> data = mapper.readValue(productTestData.productData, new TypeReference<Map<String, Object>>(){});
-        APIResponse response = page.request().post(CREATE_PRODUCT_API, RequestOptions.create().setData(data));
-        String responeBody = new String(response.body(), StandardCharsets.UTF_8);
-        Map<String, Object> res = mapper.readValue(responeBody, new TypeReference<Map<String, Object>>() {});
-        System.out.println("data: " + res.get("data"));
-        System.out.println("==================================");
-        System.out.println("Map res: " + res);
-        System.out.println("==================================");
-        System.out.println(responeBody);
+        Map<String, Object> data = mapper.readValue(productData, new TypeReference<Map<String, Object>>(){});
+        APIResponse apiResponse = page.request().post(CREATE_PRODUCT_API, RequestOptions.create().setData(data));
+        String respone = new String(apiResponse.body(), StandardCharsets.UTF_8);
+        System.out.println(respone);
         //Save result from response => Delete product by ID/UUID
         //new String(response.body()) => convert byte[] to string
-        //assertTrue(response.ok());
+        assertTrue(apiResponse.ok());
     }
 
     public boolean shouldBeOnPage(){

@@ -25,6 +25,8 @@ public class Hooks {
     public static BrowserContext context;
     public static Page page;
     private static String CREATE_PRODUCT_API = "http://localhost:3000/api/products";
+    public static String STUB_RESPONSE_CREATE_PRODUCT = "1734496800501-1765871E-ACA4-42B7-8371-913594B92955";
+    public static List<String> ids;
 
     @BeforeAll
     public static void beforeAll(){
@@ -52,6 +54,24 @@ public class Hooks {
                         .setStatus(500)
                         .setContentType("text/plain")
                         .setBody("Server error!"));
+            }
+            else{
+                handler.resume();
+            }
+        });
+    }
+    @Before("@create_product_with_invalid_uuid")
+    public static void createProductWithInvalidUuid(){
+        page.route("**", handler -> {
+            String pageUrl = handler.request().url();
+            String method = handler.request().method();
+            System.out.println("URL: " + pageUrl);
+            System.out.println("method: " + method);
+            if("POST".equals(method) && pageUrl.endsWith("/api/products")){
+                handler.fulfill(new Route.FulfillOptions()
+                        .setStatus(404)
+                        .setContentType("application/json")
+                        .setBody(STUB_RESPONSE_CREATE_PRODUCT));
             }
             else{
                 handler.resume();
