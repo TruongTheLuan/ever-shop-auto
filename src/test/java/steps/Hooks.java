@@ -7,11 +7,12 @@ import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.RequestOptions;
 import common.BrowserManagement;
 import data.productTestData;
-import io.cucumber.java.After;
-import io.cucumber.java.AfterAll;
-import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
+import io.cucumber.java.*;
+import io.qameta.allure.Allure;
+import pages.ProductPage;
 
+import java.io.ByteArrayInputStream;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -107,5 +108,14 @@ public class Hooks {
             page.request().delete(String.format(DELETE_PRODUCT_API, id));
         });
         context.close();
+    }
+    @After
+    public static void afterFail(Scenario scenario){
+        if(scenario.isFailed()){
+            byte[] image = page.screenshot(new Page.ScreenshotOptions()
+                    .setPath(Path.of(String.format("build/screenshots/%s.png",scenario.getName().replaceAll("\\s","_"))))
+                    .setFullPage(true));
+            Allure.attachment("Screenshot", new ByteArrayInputStream(image));
+        }
     }
 }
